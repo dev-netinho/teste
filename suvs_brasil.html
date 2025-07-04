@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guia Completo de SUVs e Similares no Brasil</title>
+    <style>
+        /* CSS Geral e Estrutura Principal */
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #f4f7f6;
+            color: #333;
+            margin: 0;
+            padding: 25px;
+        }
+
+        h1, h2 {
+            text-align: center;
+            color: #2c3e50;
+        }
+
+        .info-header {
+            text-align: center;
+            margin: -10px 0 40px 0;
+            font-size: 1.1em;
+            color: #606770;
+        }
+        
+        .info-header strong {
+            color: #c0392b;
+        }
+
+        .exemplar-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .exemplar-container {
+            background-color: #fff;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            overflow: hidden;
+            transition: all 0.3s ease-in-out;
+        }
+
+        .exemplar-header {
+            padding: 20px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background-color: #e9ecef;
+        }
+
+        .exemplar-header h2 {
+            margin: 0;
+            font-size: 1.8em;
+            color: #343a40;
+        }
+        
+        .exemplar-header .arrow {
+            font-size: 1.5em;
+            font-weight: bold;
+            transition: transform 0.4s ease;
+        }
+
+        .exemplar-container.active .arrow {
+            transform: rotate(180deg);
+        }
+
+        .versions-container {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.7s ease-in-out;
+            padding: 0;
+            background-color: #fdfdfd;
+        }
+        
+        .versions-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 20px;
+            padding: 25px;
+        }
+
+        /* CSS para o Flip Card da Versão */
+        .car-card {
+            background-color: transparent;
+            width: 320px;
+            height: 540px;
+            perspective: 1200px;
+            cursor: pointer;
+            margin: 0 auto;
+        }
+
+        .car-card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            transition: transform 0.8s;
+            transform-style: preserve-3d;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+        }
+
+        .car-card.is-flipped .car-card-inner {
+            transform: rotateY(180deg);
+        }
+
+        .car-card-front, .car-card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .car-card-front {
+            background-color: #ffffff;
+            color: black;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+        }
+
+        .car-card-front img {
+            width: 100%;
+            height: 210px;
+            object-fit: cover;
+        }
+
+        .car-card-front .version-name {
+            padding: 15px;
+            font-size: 1.25em;
+            font-weight: bold;
+            color: #0056b3;
+            min-height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .car-card-front .motor-info {
+            font-size: 0.9em;
+            color: #555;
+            padding: 0 15px 15px 15px;
+            text-align: center;
+        }
+
+        .car-card-front .click-indicator {
+            margin-top: auto;
+            padding-bottom: 15px;
+            font-size: 0.9em;
+            color: #888;
+            font-style: italic;
+        }
+        
+        .car-card-back {
+            background: linear-gradient(135deg, #34495e, #2c3e50);
+            color: white;
+            transform: rotateY(180deg);
+            padding: 20px;
+            overflow-y: auto;
+            text-align: left;
+        }
+        
+        .car-card-back::-webkit-scrollbar { width: 5px; }
+        .car-card-back::-webkit-scrollbar-track { background: #34495e; }
+        .car-card-back::-webkit-scrollbar-thumb { background: #1abc9c; border-radius: 5px; }
+
+        .car-card-back h3 {
+            font-size: 1.2em;
+            margin-top: 0;
+            color: #1abc9c;
+            border-bottom: 1px solid #1abc9c;
+            padding-bottom: 8px;
+            margin-bottom: 15px;
+        }
+        
+        .car-card-back .section {
+            margin-bottom: 12px;
+        }
+
+        .car-card-back .section strong {
+            color: #e67e22;
+            font-weight: bold;
+            display: block;
+            margin-bottom: 5px;
+        }
+        
+        .car-card-back .section .note {
+            font-style: italic;
+            font-size: 0.85em;
+            color: #bdc3c7;
+            margin-top: 5px;
+        }
+
+        .car-card-back p {
+            font-size: 0.92em;
+            line-height: 1.5;
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Guia Completo de SUVs e Similares no Brasil</h1>
+    <p class="info-header">Clique no nome de uma marca para ver os modelos. Depois, clique em um modelo para ver os detalhes.<br><strong>Atenção:</strong> Os preços são estimativas baseadas nos valores públicos nacionais e podem variar nas concessionárias de Belém e Marabá.</p>
+
+    <div class="exemplar-grid">
+
+        <div class="exemplar-container">
+            <div class="exemplar-header"><h2>Caoa Chery</h2><span class="arrow">▼</span></div>
+            <div class="versions-container">
+                <div class="versions-grid">
+                    <div class="car-card"><div class="car-card-inner"><div class="car-card-front"><img src="https://www.autoo.com.br/fotos/2023/2/1280_960/caoa_chery_tiggo_5x_sport_2024_1_21022023_10340_1.jpg" alt="Caoa Chery Tiggo 5X"><div class="version-name">Tiggo 5X</div><p class="motor-info">1.5 Turbo | Câmbio CVT de 9 marchas</p><div class="click-indicator">(Clique para girar)</div></div><div class="car-card-back"><h3>Caoa Chery Tiggo 5X</h3><div class="section"><strong>Categoria:</strong><p>SUV Compacto</p></div><div class="section"><strong>Versões (automáticas):</strong><p>Sport, Pro, Pro Hybrid Max Drive</p></div><div class="section"><strong>Preço (Estimativa Belém/Marabá):</strong><p>~R$ 120k (Sport) a ~R$ 150k (Pro Hybrid)</p></div><div class="section"><strong>Prós:</strong><p>Bom custo-benefício na versão Sport. Suspensão traseira independente (raro na categoria). Pacote de equipamentos completo nas versões Pro.</p></div><div class="section"><strong>Contras:</strong><p>Porta-malas de 340L é um dos menores. Consumo de combustível não é destaque.</p></div><div class="section"><strong>Defeitos Crônicos:</strong><p>Relatos sobre a durabilidade de componentes da suspensão em pisos ruins e falhas pontuais no sistema multimídia das versões mais antigas.</p></div></div></div></div>
+                    <div class="car-card"><div class="car-card-inner"><div class="car-card-front"><img src="https://cdn.motor1.com/images/mgl/WONoZ1/s1/caoa-chery-tiggo-7-sport.jpg" alt="Caoa Chery Tiggo 7"><div class="version-name">Tiggo 7</div><p class="motor-info">1.5T ou 1.6T | Câmbio CVT ou DCT-7</p><div class="click-indicator">(Clique para girar)</div></div><div class="car-card-back"><h3>Caoa Chery Tiggo 7</h3><div class="section"><strong>Categoria:</strong><p>SUV Médio</p></div><div class="section"><strong>Versões (automáticas):</strong><p>Sport (1.5T CVT), Pro Max Drive (1.6T DCT), Pro Hybrid (1.5T CVT)</p></div><div class="section"><strong>Preço (Estimativa Belém/Marabá):</strong><p>~R$ 135k (Sport) a ~R$ 170k (Pro Max Drive)</p></div><div class="section"><strong>Prós:</strong><p>Versão Sport tem preço agressivo para um SUV médio. Bom espaço interno e porta-malas (475L). Versão 1.6T tem ótimo desempenho.</p></div><div class="section"><strong>Contras:</strong><p>Consumo elevado, especialmente na versão 1.6T. Câmbio DCT pode gerar desconfiança em alguns compradores.</p></div><div class="section"><strong>Defeitos Crônicos:</strong><p>O câmbio DCT de 7 marchas teve relatos de trepidação em algumas unidades. Manutenção rigorosa e atualizações de software são essenciais.</p></div></div></div></div>
+                    <div class="car-card"><div class="car-card-inner"><div class="car-card-front"><img src="https://www.autoo.com.br/fotos/2022/6/1280_960/caoa-chery-tiggo-8-pro-plug-in-hybrid_1_16062022_12502.jpg" alt="Caoa Chery Tiggo 8"><div class="version-name">Tiggo 8</div><p class="motor-info">1.6 Turbo ou 1.5 Híbrido Plug-in</p><div class="click-indicator">(Clique para girar)</div></div><div class="car-card-back"><h3>Caoa Chery Tiggo 8</h3><div class="section"><strong>Categoria:</strong><p>SUV Médio de 7 Lugares</p></div><div class="section"><strong>Versões (automáticas):</strong><p>Max Drive (1.6T DCT), PRO Plug-in Hybrid (DHT)</p></div><div class="section"><strong>Preço (Estimativa Belém/Marabá):</strong><p>~R$ 180k (Max Drive) a ~R$ 240k (Plug-in Hybrid)</p></div><div class="section"><strong>Prós:</strong><p>Ótimo custo-benefício para um SUV de 7 lugares. Pacote tecnológico recheado. Versão híbrida é potente e pode ser muito econômica.</p></div><div class="section"><strong>Contras:</strong><p>O terceiro banco é apertado para adultos. Consumo da versão a combustão é alto. Desvalorização pode ser acentuada.</p></div><div class="section"><strong>Defeitos Crônicos:</strong><p>Mesma atenção ao câmbio DCT da versão a combustão. O sistema híbrido é complexo e requer mão de obra especializada.</p></div></div></div></div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="exemplar-container">
+            <div class="exemplar-header"><h2>Volkswagen</h2><span class="arrow">▼</span></div>
+            <div class="versions-container">
+                <div class="versions-grid">
+                     <div class="car-card"><div class="car-card-inner"><div class="car-card-front"><img src="https://cdn.motor1.com/images/mgl/Lp3lEv/s1/volkswagen-t-cross-2025.jpg" alt="Volkswagen Tera TSI"><div class="version-name">Tera TSI</div><p class="motor-info">Versões: Tera 170 Tsi, Tera Comfort, Tera High</p><div class="click-indicator">(Clique para girar)</div></div><div class="car-card-back"><h3>Volkswagen "Tera TSI" (T-Cross 200 TSI)</h3><div class="section"><strong>Categoria:</strong><p>SUV Compacto</p></div><div class="section"><strong>Versões solicitadas:</strong><p>Tera 170 Tsi, Tera Comfort, Tera High</p><p class="note"><b>Nota do Assistente:</b> "Tera" é um nome de marketing usado por concessionárias para o VW T-Cross. As versões e o motor 170 TSI não correspondem à linha oficial da VW Brasil, que usa o motor 200 TSI para o T-Cross de entrada.</p></div><div class="section"><strong>Preço (Estimativa Belém/Marabá):</strong><p>~R$ 145k (para o T-Cross 200 TSI)</p></div><div class="section"><strong>Prós (do T-Cross 200 TSI):</strong><p>Excelente espaço interno, segurança 5 estrelas, design renovado (2025) com faróis full-LED de série.</p></div><div class="section"><strong>Contras (do T-Cross 200 TSI):</strong><p>Acabamento interno com muito plástico, motor pode ser um pouco ruidoso em altas rotações.</p></div><div class="section"><strong>Defeitos Crônicos:</strong><p>Relatos de ruídos nas bieletas da suspensão dianteira. Injeção direta requer combustível de boa qualidade.</p></div></div></div></div>
+                    <div class="car-card"><div class="car-card-inner"><div class="car-card-front"><img src="https://cdn.motor1.com/images/mgl/Lp3loq/s1/volkswagen-nivus-2025-projecao.jpg" alt="Volkswagen Nivus"><div class="version-name">Nivus</div><p class="motor-info">Versões: Comfortline 200 TSI, Highline 200 TSI</p><div class="click-indicator">(Clique para girar)</div></div><div class="car-card-back"><h3>Volkswagen Nivus</h3><div class="section"><strong>Categoria:</strong><p>SUV Compacto Coupé</p></div><div class="section"><strong>Preço (Estimativa Belém/Marabá):</strong><p>~R$ 136k (Comfortline) a ~R$ 154k (Highline)</p></div><div class="section"><strong>Prós:</strong><p>Design atraente, ótima dirigibilidade, porta-malas de 415L, piloto automático adaptativo (ACC) de série.</p></div><div class="section"><strong>Contras:</strong><p>Acabamento interno muito simples, espaço traseiro justo, sem saídas de ar condicionado atrás.</p></div><div class="section"><strong>Defeitos Crônicos:</strong><p>Pode apresentar ruídos na suspensão. Cuidados com a injeção direta são recomendados.</p></div></div></div></div>
+                    <div class="car-card"><div class="car-card-inner"><div class="car-card-front"><img src="https://cdn.motor1.com/images/mgl/pPZz2l/s1/vw-t-cross-2025.jpg" alt="Volkswagen T-Cross"><div class="version-name">T-Cross</div><p class="motor-info">Versões: 200 TSI, Comfortline 200 TSI, Extreme 250 TSI, Highline 250 TSI, Sense 200 TSI</p><div class="click-indicator">(Clique para girar)</div></div><div class="car-card-back"><h3>Volkswagen T-Cross</h3><div class="section"><strong>Categoria:</strong><p>SUV Compacto</p></div><div class="section"><strong>Versões solicitadas (automáticas):</strong><p>200 TSI, Comfortline 200 TSI, Extreme 250 TSI, Highline 250 TSI, Sense 200 TSI</p><p class="note"><b>Nota do Assistente:</b> A linha atual no Brasil é: 200 TSI, Comfortline 200 TSI e Highline 250 TSI. "Sense" foi uma versão antiga e "Extreme" não é usada neste modelo.</p></div><div class="section"><strong>Preço (Estimativa Belém/Marabá):</strong><p>~R$ 145k a ~R$ 178k</p></div><div class="section"><strong>Prós:</strong><p>Espaço interno e segurança excelentes. Versão Highline 1.4T é muito potente.</p></div><div class="section"><strong>Contras:</strong><p>Acabamento com muito plástico, preço elevado.</p></div><div class="section"><strong>Defeitos Crônicos:</strong><p>Idênticos ao "Tera" (ruídos na suspensão, cuidados com injeção direta).</p></div></div></div></div>
+                    <div class="car-card"><div class="car-card-inner"><div class="car-card-front"><img src="https://www.autoo.com.br/fotos/2024/5/1280_960/vw-taos-2025_1_21052024_17441.jpg" alt="Volkswagen Taos"><div class="version-name">Taos</div><p class="motor-info">Versões: Comfortline 250 TSI, Highline 250 TSI</p><div class="click-indicator">(Clique para girar)</div></div><div class="car-card-back"><h3>Volkswagen Taos</h3><div class="section"><strong>Categoria:</strong><p>SUV Médio</p></div><div class="section"><strong>Preço (Estimativa Belém/Marabá):</strong><p>~R$ 190k (Comfortline) a ~R$ 215k (Highline)</p></div><div class="section"><strong>Prós:</strong><p>Ótimo espaço interno e porta-malas (498L). Desempenho excelente do motor 1.4T. Suspensão traseira multilink.</p></div><div class="section"><strong>Contras:</strong><p>Design conservador, consumo poderia ser melhor.</p></div><div class="section"><strong>Defeitos Crônicos:</strong><p>O motor 1.4 TSI é robusto, mas atenção à carbonização das válvulas em longo prazo. Solução: descarbonização preventiva.</p></div></div></div></div>
+                    <div class="car-card"><div class="car-card-inner"><div class="car-card-front"><img src="https://cdn.motor1.com/images/mgl/W8B7Z/s1/vw-id.4-gtx.jpg" alt="Volkswagen ID.4"><div class="version-name">ID.4</div><p class="motor-info">Elétrico</p><div class="click-indicator">(Clique para girar)</div></div><div class="car-card-back"><h3>Volkswagen ID.4</h3><div class="section"><strong>Categoria:</strong><p>SUV Médio Elétrico</p></div><div class="section"><strong>Preço (Estimativa Belém/Marabá):</strong><p>Vendido por assinatura ou compra direta (~R$ 340k)</p></div><div class="section"><strong>Prós:</strong><p>Silencioso, confortável, ótimo espaço interno e tecnologia avançada.</p></div><div class="section"><strong>Contras:</strong><p>Preço de compra muito elevado, dependência da infraestrutura de recarga.</p></div><div class="section"><strong>Defeitos Crônicos:</strong><p>Sem defeitos mecânicos. Atenção à saúde da bateria e a atualizações de software.</p></div></div></div></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="exemplar-container">
+            <div class="exemplar-header"><h2>Chevrolet</h2><span class="arrow">▼</span></div>
+            <div class="versions-container">
+                <div class="versions-grid">
+                     <div class="car-card"><div class="car-card-inner"><div class="car-card-front"><img src="https://www.chevrolet.com.br/content/dam/chevrolet/mercosur/brazil/portuguese/index/crossovers-and-suvs/2025-spin/colorizer/spn-premier-my25-cinza-rush.jpg" alt="Chevrolet Spin"><div class="version-name">Spin</div><p class="motor-info">1.8 Aspirado | AT 6 marchas</p><div class="click-indicator">(Clique para girar)</div></div><div class="car-card-back"><h3>Chevrolet Spin</h3><div class="section"><strong>Categoria:</strong><p>MPV / Crossover de 7 Lugares</p></div><div class="section"><strong>Preço (Estimativa Belém/Marabá):</strong><p>~R$ 130k (LT) a ~R$ 147k (Premier)</p></div><div class="section"><strong>Prós:</strong><p>Um dos veículos de 7 lugares mais baratos do Brasil. Espaço interno e versatilidade. Mecânica 1.8 robusta e de manutenção simples.</p></div><div class="section"><strong>Contras:</strong><p>Motor antigo, com desempenho e consumo defasados. Design não agrada a todos. Equipamentos de segurança apenas básicos.</p></div><div class="section"><strong>Defeitos Crônicos:</strong><p>O conjunto é muito confiável. Atenção a vazamentos de óleo pela junta da tampa de válvulas em alta quilometragem.</p></div></div></div></div>
+                    <div class="car-card"><div class="car-card-inner"><div class="car-card-front"><img src="https://www.chevrolet.com.br/content/dam/chevrolet/mercosur/brazil/portuguese/index/crossovers-and-suvs/2025-tracker-premier/colorizer/tracker-premier-2025-preto.jpg" alt="Chevrolet Tracker"><div class="version-name">Tracker</div><p class="motor-info">Versões: AT, LT, LTZ, RS e Premier</p><div class="click-indicator">(Clique para girar)</div></div><div class="car-card-back"><h3>Chevrolet Tracker</h3><div class="section"><strong>Categoria:</strong><p>SUV Compacto</p></div><div class="section"><strong>Preço (Estimativa Belém/Marabá):</strong><p>~R$ 137k (1.0T AT) a ~R$ 170k (Premier)</p></div><div class="section"><strong>Prós:</strong><p>6 airbags em todas as versões, bom consumo, motor 1.2T tem ótimo desempenho.</p></div><div class="section"><strong>Contras:</strong><p>Acabamento interno muito simples, porta-malas apenas na média.</p></div><div class="section"><strong>Defeitos Crônicos:</strong><p>Modelos 1.0T (2020-22) tiveram casos de quebra da correia dentada banhada a óleo. Solução: seguir rigorosamente o plano de manutenção com o óleo especificado.</p></div></div></div></div>
+                    <div class="car-card"><div class="car-card-inner"><div class="car-card-front"><img src="https://www.chevrolet.com.br/content/dam/chevrolet/mercosur/brazil/portuguese/index/crossovers-and-suvs/equinox-premier-2024/colorizer/azul-lyra-mov-v2.jpg" alt="Chevrolet Equinox"><div class="version-name">Equinox</div><p class="motor-info">1.5 Turbo | AT 6 marchas</p><div class="click-indicator">(Clique para girar)</div></div><div class="car-card-back"><h3>Chevrolet Equinox</h3><div class="section"><strong>Categoria:</strong><p>SUV Médio</p></div><div class="section"><strong>Preço (Estimativa Belém/Marabá):</strong><p>~R$ 228k (RS) a ~R$ 247k (Premier AWD)</p></div><div class="section"><strong>Prós:</strong><p>Ótimo espaço interno. Bom desempenho do motor 1.5T. Pacote de equipamentos recheado, incluindo itens de segurança avançada.</p></div><div class="section"><strong>Contras:</strong><p>Preço elevado. Câmbio de 6 marchas, enquanto rivais já usam 8 ou mais. Acabamento poderia ser mais refinado pelo preço.</p></div><div class="section"><strong>Defeitos Crônicos:</strong><p>Conjunto mecânico confiável, sem relatos crônicos graves. Alguns proprietários relatam consumo de combustível um pouco alto.</p></div></div></div></div>
+                    <div class="car-card"><div class="car-card-inner"><div class="car-card-front"><img src="https://www.chevrolet.com.br/content/dam/chevrolet/mercosur/brazil/portuguese/index/crossovers-and-suvs/2025-trailblazer-high-country/colorizer/trailblazer-hc-2025-preto.jpg" alt="Chevrolet Trailblazer"><div class="version-name">Trailblazer</div><p class="motor-info">2.8 Turbodiesel | AT 8 marchas</p><div class="click-indicator">(Clique para girar)</div></div><div class="car-card-back"><h3>Chevrolet Trailblazer</h3><div class="section"><strong>Categoria:</strong><p>SUV Grande (Baseado em Picape)</p></div><div class="section"><strong>Preço (Estimativa Belém/Marabá):</strong><p>~R$ 370k (High Country)</p></div><div class="section"><strong>Prós:</strong><p>Extrema robustez. Capacidade para 7 pessoas. Torque gigantesco do motor Duramax, ótimo para off-road e reboque. Confiabilidade mecânica.</p></div><div class="section"><strong>Contras:</strong><p>Preço muito alto. Dirigibilidade "de picape", menos confortável que SUVs monobloco. Consumo elevado, mesmo sendo diesel.</p></div><div class="section"><strong>Defeitos Crônicos:</strong><p>O motor Duramax é lendário pela durabilidade. Atenção à manutenção do sistema de injeção e turbina, que são caros se precisarem de reparo. Usar diesel de boa qualidade é fundamental.</p></div></div></div></div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="exemplar-container">
+            <div class="exemplar-header"><h2>Fiat</h2><span class="arrow">▼</span></div>
+            <div class="versions-container">
+                <div class="versions-grid">
+                    <div class="car-card"><div class="car-card-inner"><div class="car-card-front"><img src="https://www.fiat.com.br/content/dam/fiat/products/363/ab1/1/2025/page/versoes/MVS-363.AB1.1.0-abarth_vermelho_montecarlo.png" alt="Fiat Pulse"><div class="version-name">Pulse</div><p class="motor-info">Versões automáticas: Drive 1.3 AT, Audace T200 AT, Impetus T200 AT, Abarth</p><div class="click-indicator">(Clique para girar)</div></div><div class="car-card-back"><h3>Fiat Pulse</h3><div class="section"><strong>Categoria:</strong><p>SUV Compacto</p></div><div class="section"><strong>Preço (Estimativa Belém/Marabá):</strong><p>~R$ 105k (Drive AT) a ~R$ 152k (Abarth)</p></div><div class="section"><strong>Prós:</strong><p>Bom custo-benefício, bom pacote de tecnologia, versão Abarth é um esportivo de verdade.</p></div><div class="section"><strong>Contras:</strong><p>Acabamento simples, espaço traseiro justo.</p></div><div class="section"><strong>Defeitos Crônicos:</strong><p>Relatos de pequenos ruídos de acabamento. Motor T270 (Abarth) requer atenção ao nível de óleo.</p></div></div></div></div>
+                    <div class="car-card"><div class="car-card-inner"><div class="car-card-front"><img src="https://www.fiat.com.br/content/dam/fiat/products/376/ab1/1/2025/page/versoes/MVS376.AB1.1.0-abarth_vermelho_montecarlo_com_teto_preto.png" alt="Fiat Fastback"><div class="version-name">Fastback</div><p class="motor-info">Versões: T200, Audace, Impetus, Limited Edition e Abarth</p><div class="click-indicator">(Clique para girar)</div></div><div class="car-card-back"><h3>Fiat Fastback</h3><div class="section"><strong>Categoria:</strong><p>SUV Compacto Coupé</p></div><div class="section"><strong>Preço (Estimativa Belém/Marabá):</strong><p>~R$ 124k (Audace) a ~R$ 163k (Abarth)</p></div><div class="section"><strong>Prós:</strong><p>Porta-malas gigante (600L), design diferenciado, bom desempenho.</p></div><div class="section"><strong>Contras:</strong><p>Espaço para cabeça no banco traseiro limitado, acabamento poderia ser melhor.</p></div><div class="section"><strong>Defeitos Crônicos:</strong><p>Compartilha mecânica com Pulse, atenção aos mesmos pontos.</p></div></div></div></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="exemplar-container">
+            <div class="exemplar-header"><h2>Nissan</h2><span class="arrow">▼</span></div>
+            <div class="versions-container">
+                <div class="versions-grid">
+                    <div class="car-card"><div class="car-card-inner"><div class="car-card-front"><img src="https://www.autoo.com.br/fotos/2024/5/1280_960/nissan-kicks-2025_1_09052024_18210_1.jpg" alt="Nissan Kicks"><div class="version-name">Kicks</div><p class="motor-info">Versões: Sense, Advance, Exclusive e Platinum</p><div class="click-indicator">(Clique para girar)</div></div><div class="car-card-back"><h3>Nissan Kicks</h3><div class="section"><strong>Categoria:</strong><p>SUV Compacto</p></div><div class="section"><strong>Preço (Estimativa Belém/Marabá):</strong><p>~R$ 118k (Sense) a ~R$ 149k (Exclusive)</p></div><div class="section"><strong>Prós:</strong><p>Extremamente confortável, baixo consumo, mecânica confiável.</p></div><div class="section"><strong>Contras:</strong><p>Desempenho apenas suficiente, projeto aguardando nova geração.</p></div><div class="section"><strong>Defeitos Crônicos:</strong><p>O câmbio CVT exige a troca do fluido no prazo correto para garantir sua longevidade.</p></div></div></div></div>
+                     <div class="car-card"><div class="car-card-inner"><div class="car-card-front"><img src="https://www.automaistv.com.br/wp-content/uploads/2023/09/Nissan-Kicks-XPlay-2024-11.jpg" alt="Nissan Kicks Play"><div class="version-name">Kicks Play</div><p class="motor-info">Versões: Active, Sense e Advance Plus</p><div class="click-indicator">(Clique para girar)</div></div><div class="car-card-back"><h3>Nissan Kicks Play</h3><div class="section"><strong>Categoria:</strong><p>SUV Compacto (Edição Especial)</p></div><div class="section"><strong>Preço (Estimativa Belém/Marabá):</strong><p>~R$ 147k</p></div><div class="section"><strong>Prós:</strong><p>Visual exclusivo com detalhes coloridos.</p></div><div class="section"><strong>Contras:</strong><p>É uma edição limitada, difícil de encontrar.</p></div><div class="section"><strong>Defeitos Crônicos:</strong><p>Idênticos ao Kicks convencional.</p></div></div></div></div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="exemplar-container">
+            <div class="exemplar-header"><h2>Peugeot</h2><span class="arrow">▼</span></div>
+            <div class="versions-container">
+                <div class="versions-grid">
+                    <div class="car-card"><div class="car-card-inner"><div class="car-card-front"><img src="https://www.autoo.com.br/fotos/2023/1/1280_960/peugeot-2008-2023-1_19012023_11527_1.jpg" alt="Peugeot 2008"><div class="version-name">2008</div><p class="motor-info">Versões: Active, Allure e GT</p><div class="click-indicator">(Clique para girar)</div></div><div class="car-card-back"><h3>Peugeot 2008</h3><div class="section"><strong>Categoria:</strong><p>SUV Compacto</p></div><div class="section"><strong>Preço (Estimativa Belém/Marabá):</strong><p>~R$ 115k (Allure) a ~R$ 137k (Griffe THP)</p></div><div class="section"><strong>Prós:</strong><p>Desempenho espetacular na versão THP. Posição de dirigir "i-Cockpit".</p></div><div class="section"><strong>Contras:</strong><p>Projeto antigo, desvalorização acentuada, reputação do motor THP.</p></div><div class="section"><strong>Defeitos Crônicos:</strong><p>Motor THP requer atenção (corrente de comando, bomba de alta pressão). Solução: Manutenção rigorosa e bom combustível.</p></div></div></div></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="exemplar-container">
+            <div class="exemplar-header"><h2>Renault</h2><span class="arrow">▼</span></div>
+            <div class="versions-container">
+                <div class="versions-grid">
+                    <div class="car-card"><div class="car-card-inner"><div class="car-card-front"><img src="https://www.autoo.com.br/fotos/2024/2/1280_960/renault-kardian-1_22022024_17402_1.jpg" alt="Renault Kardian"><div class="version-name">Kardian</div><p class="motor-info">Versões: Evolution, Techno e Première Edition</p><div class="click-indicator">(Clique para girar)</div></div><div class="car-card-back"><h3>Renault Kardian</h3><div class="section"><strong>Categoria:</strong><p>SUV Compacto</p></div><div class="section"><strong>Preço (Estimativa Belém/Marabá):</strong><p>~R$ 115k (Evolution) a ~R$ 135k (Première)</p></div><div class="section"><strong>Prós:</strong><p>Preço agressivo, pacote de segurança ADAS desde a entrada, bom desempenho.</p></div><div class="section"><strong>Contras:</strong><p>Câmbio de dupla embreagem pode gerar desconfiança, acabamento simples.</p></div><div class="section"><strong>Defeitos Crônicos:</strong><p>Lançamento recente, sem histórico. Durabilidade do câmbio em trânsito pesado é o ponto de atenção.</p></div></div></div></div>
+                    <div class="car-card"><div class="car-card-inner"><div class="car-card-front"><img src="https://www.autoo.com.br/fotos/2023/11/1280_960/renault-duster-2024_1_27112023_17201_1.jpg" alt="Renault Duster"><div class="version-name">Duster</div><p class="motor-info">Versões Automáticas: Intense Plus 1.6 CVT, e Iconic Plus 1.3 TCe e 1.6 CVT</p><div class="click-indicator">(Clique para girar)</div></div><div class="car-card-back"><h3>Renault Duster</h3><div class="section"><strong>Categoria:</strong><p>SUV Compacto</p></div><div class="section"><strong>Preço (Estimativa Belém/Marabá):</strong><p>~R$ 139k (Intense CVT) a ~R$ 156k (Iconic TCe)</p></div><div class="section"><strong>Prós:</strong><p>Robustez da suspensão, ótimo porta-malas (475L) e espaço interno. Versão 1.3 turbo tem excelente desempenho.</p></div><div class="section"><strong>Contras:</strong><p>Acabamento interno simples e datado, consumo do motor 1.6 é regular.</p></div><div class="section"><strong>Defeitos Crônicos:</strong><p>Conjunto 1.6 é confiável. O motor 1.3T é moderno e não tem crônicos conhecidos.</p></div></div></div></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="exemplar-container">
+            <div class="exemplar-header"><h2>Hyundai</h2><span class="arrow">▼</span></div>
+            <div class="versions-container">
+                <div class="versions-grid">
+                    <div class="car-card"><div class="car-card-inner"><div class="car-card-front"><img src="https://www.autoo.com.br/fotos/2021/8/1280_960/hyundai_creta_ultimate_2022_1_26082021_16422_1.jpg" alt="Hyundai Creta"><div class="version-name">Creta</div><p class="motor-info">Versões: Comfort, Limited, Platinum, N Line e Ultimate</p><div class="click-indicator">(Clique para girar)</div></div><div class="car-card-back"><h3>Hyundai Creta</h3><div class="section"><strong>Categoria:</strong><p>SUV Compacto</p></div><div class="section"><strong>Preço (Estimativa Belém/Marabá):</strong><p>~R$ 142k (Comfort) a ~R$ 187k (Ultimate)</p></div><div class="section"><strong>Prós:</strong> <p>Confortável, pacote tecnológico recheado, bom acabamento.</p></div><div class="section"><strong>Contras:</strong> <p>Design polêmico, consumo poderia ser melhor.</p></div><div class="section"><strong>Defeitos Crônicos:</strong> <p>Ruído na coluna de direção (troca do acoplador elástico resolve).</p></div></div></div></div>
+                    <div class="car-card"><div class="car-card-inner"><div class="car-card-front"><img src="https://www.autoo.com.br/fotos/2023/5/1280_960/hyundai-palisade-2023_1_18052023_104445_1.jpg" alt="Hyundai Palisade"><div class="version-name">Palisade</div><p class="motor-info">Versões: SEL, Limited e Calligraphy</p><div class="click-indicator">(Clique para girar)</div></div><div class="car-card-back"><h3>Hyundai Palisade</h3><div class="section"><strong>Categoria:</strong><p>SUV Grande de Luxo</p></div><div class="section"><strong>Preço (Estimativa Belém/Marabá):</strong><p>~R$ 510k</p></div><div class="section"><strong>Prós:</strong> <p>Gigantesco, luxuoso, 8 lugares, motor V6 forte.</p></div><div class="section"><strong>Contras:</strong> <p>Preço e consumo de combustível muito elevados.</p></div><div class="section"><strong>Defeitos Crônicos:</strong> <p>Motor V6 confiável. Sem crônicos conhecidos no Brasil devido ao baixo volume.</p></div></div></div></div>
+                    <div class="car-card"><div class="car-card-inner"><div class="car-card-front"><img src="https://revistacarro.com.br/wp-content/uploads/2020/07/Hyundai-Tucson-1-1.jpg" alt="Hyundai Tucson"><div class="version-name">Tucson</div><p class="motor-info">Motor 1.6 Turbo</p><div class="click-indicator">(Clique para girar)</div></div><div class="car-card-back"><h3>Hyundai Tucson</h3><div class="section"><strong>Categoria:</strong><p>SUV Médio</p></div><div class="section"><strong>Preço (Estimativa Belém/Marabá):</strong><p>~R$ 180k (GLS)</p></div><div class="section"><strong>Prós:</strong> <p>Bom desempenho do motor 1.6T, pacote de equipamentos completo pelo preço.</p></div><div class="section"><strong>Contras:</strong> <p>Projeto antigo, câmbio de dupla embreagem (DCT) pode gerar desconfiança.</p></div><div class="section"><strong>Defeitos Crônicos:</strong> <p>O câmbio DCT teve relatos de superaquecimento. Manutenção rigorosa do fluido e software são essenciais.</p></div></div></div></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="exemplar-container">
+            <div class="exemplar-header"><h2>Citroën</h2><span class="arrow">▼</span></div>
+            <div class="versions-container">
+                <div class="versions-grid">
+                     <div class="car-card"><div class="car-card-inner"><div class="car-card-front"><img src="https://www.autoo.com.br/fotos/2024/4/1280_960/citroen-c3-2024-hatch_1_26042024_174052_1.jpg" alt="Citroën C3"><div class="version-name">C3</div><p class="motor-info">Versão automática: YOU! TURBO 200 AT</p><div class="click-indicator">(Clique para girar)</div></div><div class="car-card-back"><h3>Citroën C3</h3><div class="section"><strong>Categoria:</strong><p>Hatch com Atitude SUV</p></div><div class="section"><strong>Preço (Estimativa Belém/Marabá):</strong><p>~R$ 100k</p></div><div class="section"><strong>Prós:</strong> <p>Suspensão muito confortável, bom espaço interno, motor turbo da Fiat é ágil e confiável.</p></div><div class="section"><strong>Contras:</strong> <p>Acabamento extremamente simples, lista de equipamentos de segurança enxuta.</p></div><div class="section"><strong>Defeitos Crônicos:</strong> <p>A mecânica turbo é recente no modelo, mas já conhecida e confiável de outros carros da Fiat.</p></div></div></div></div>
+                    <div class="car-card"><div class="car-card-inner"><div class="car-card-front"><img src="https://www.autoo.com.br/fotos/2023/8/1280_960/citroen_c3_aircross_2024_1_30082023_13524_1.jpg" alt="Citroën C3 Aircross"><div class="version-name">C3 Aircross</div><p class="motor-info">1.0 Turbo 200 Flex | CVT 7 marchas</p><div class="click-indicator">(Clique para girar)</div></div><div class="car-card-back"><h3>Citroën C3 Aircross</h3><div class="section"><strong>Categoria:</strong><p>SUV Compacto (Opção de 7 lugares)</p></div><div class="section"><strong>Preço (Estimativa Belém/Marabá):</strong><p>~R$ 120k (Feel) a ~R$ 137k (Shine)</p></div><div class="section"><strong>Prós:</strong> <p>Um dos carros de 7 lugares mais baratos, ótimo espaço na segunda fileira, motor turbo ágil.</p></div><div class="section"><strong>Contras:</strong> <p>Acabamento muito simples, poucos airbags, os dois últimos lugares são apertados.</p></div><div class="section"><strong>Defeitos Crônicos:</strong> <p>Lançamento recente. O conjunto mecânico é confiável e conhecido dos carros Fiat.</p></div></div></div></div>
+                    <div class="car-card"><div class="car-card-inner"><div class="car-card-front"><img src="https://www.autoo.com.br/fotos/2024/7/1280_960/citroen-basalt-2025_1_02072024_153722_1.jpg" alt="Citroën Basalt"><div class="version-name">Basalt</div><p class="motor-info">Versões automáticas: FEEL TURBO 200, SHINE TURBO 200</p><div class="click-indicator">(Clique para girar)</div></div><div class="car-card-back"><h3>Citroën Basalt</h3><div class="section"><strong>Categoria:</strong><p>SUV Compacto Coupé</p></div><div class="section"><strong>Preço (Estimativa Belém/Marabá):</strong><p>Estimado a partir de R$ 125k</p></div><div class="section"><strong>Prós:</strong> <p>Design de SUV cupê, que é uma tendência. Compartilhará a mecânica confiável do C3 Aircross e deve ter bom porta-malas.</p></div><div class="section"><strong>Contras:</strong> <p>Provavelmente terá o mesmo acabamento simples e a mesma lista de equipamentos enxuta da linha C3/Aircross.</p></div><div class="section"><strong>Defeitos Crônicos:</strong> <p>Ainda não foi lançado. A expectativa é que não tenha problemas crônicos, dado que a base mecânica é conhecida e testada.</p></div></div></div></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const exemplarHeaders = document.querySelectorAll('.exemplar-header');
+            exemplarHeaders.forEach(header => {
+                header.addEventListener('click', () => {
+                    const container = header.parentElement;
+                    document.querySelectorAll('.exemplar-container.active').forEach(openContainer => {
+                        if (openContainer !== container) {
+                            openContainer.classList.remove('active');
+                            openContainer.querySelector('.versions-container').style.maxHeight = '0';
+                        }
+                    });
+                    container.classList.toggle('active');
+                    const versionsContainer = header.nextElementSibling;
+                    if (container.classList.contains('active')) {
+                        versionsContainer.style.maxHeight = versionsContainer.scrollHeight + "px";
+                    } else {
+                        versionsContainer.style.maxHeight = '0';
+                    }
+                });
+            });
+            const carCards = document.querySelectorAll('.car-card');
+            carCards.forEach(card => {
+                card.addEventListener('click', (event) => {
+                    event.stopPropagation(); 
+                    card.classList.toggle('is-flipped');
+                });
+            });
+        });
+    </script>
+
+</body>
+</html>
